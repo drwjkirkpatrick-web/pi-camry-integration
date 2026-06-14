@@ -1,0 +1,10 @@
+# Copy to /etc/pi-camry/environment and fill in your secrets
+# This file is sourced by systemd and should have 600 permissions
+
+# Telegram Bot Token (get from @BotFather)
+TG_BOT_TOKEN=your_token_here
+
+# Optional: override any config value via environment
+# OBD_PORT=/dev/ttyUSB0
+# GPS_PORT=/dev/ttyACM0
+# CAMRY_LOG_LEVEL=DEBUG

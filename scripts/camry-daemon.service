@@ -1,0 +1,47 @@
+[Unit]
+Description=Hermes Camry Integration Daemon
+Documentation=https://github.com/drwjkirkpatrick-web/pi-camry-integration
+After=network.target sound.target
+
+[Service]
+Type=notify
+# Working directory
+WorkingDirectory=/home/pi/pi-camry-integration
+
+# Environment
+Environment="CAMRY_LOG_LEVEL=INFO"
+Environment="OBD_PORT=/dev/ttyUSB0"
+Environment="GPS_PORT=/dev/ttyACM0"
+Environment="TG_BOT_TOKEN=REPLACE_ME"
+# Load additional env from file (create this with secrets)
+EnvironmentFile=-/etc/pi-camry/environment
+
+# Run as pi user (not root for GPIO safety)
+User=pi
+Group=pi
+
+# Python path — adjust if using venv
+ExecStart=/home/pi/.local/bin/uv run --python 3.11 camry-daemon
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStop=/bin/kill -SIGTERM $MAINPID
+
+# Graceful shutdown
+TimeoutStopSec=90
+KillSignal=SIGTERM
+
+# Restart policy
+Restart=on-failure
+RestartSec=10
+StartLimitInterval=60
+StartLimitBurst=3
+
+# Resource limits
+LimitNOFILE=65536
+
+# Security hardening (optional — remove if causing issues with GPIO)
+# ProtectSystem=strict
+# ProtectHome=true
+# ReadWritePaths=/mnt/nvme0n1p2 /var/log/pi-camry
+
+[Install]
+WantedBy=multi-user.target

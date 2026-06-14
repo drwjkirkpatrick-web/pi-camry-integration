@@ -1,0 +1,112 @@
+# Hermes Camry Integration — Configuration
+# Copy this file to /etc/pi-camry/camry.yaml and edit for your vehicle
+
+# ── Core ──
+debug: false
+log_level: INFO
+
+# ── OBD-II ──
+obd:
+  port: /dev/ttyUSB0           # ELM327 USB adapter
+  baudrate: 38400
+  protocol: AUTO                 # AUTO, ISO9141_2, KWP2000
+  timeout: 5.0
+  reconnect_interval: 10.0
+
+# ── Camera ──
+camera:
+  enabled: true
+  primary_device: /dev/video0  # Pi Camera Module 3 (CSI0)
+  secondary_device: null       # Set to /dev/video1 for rear camera
+  resolution: [1920, 1080]
+  fps: 30
+  buffer_seconds: 60
+  record_on_motion: true
+  record_on_hard_brake: true
+  record_on_obd_event: true
+  video_dir: /mnt/nvme0n1p2/video
+  max_disk_usage_percent: 85.0
+  encrypt: true
+  encryption_key_path: /etc/pi-camry/video.key
+
+# ── GPS ──
+gps:
+  enabled: true
+  port: /dev/ttyACM0           # u-blox NEO-M8N
+  baudrate: 9600
+  sample_rate_hz: 1.0
+  home_location: [45.5152, -122.6784]  # [lat, lon] — replace with yours
+  geofence_radius_m: 500.0
+
+# ── IMU ──
+imu:
+  enabled: true
+  i2c_bus: 1                   # Pi 5 I2C1 (GPIO 2/3)
+  i2c_address: 0x68            # MPU-6050 AD0=GND
+  sample_rate_hz: 100.0
+  collision_g_threshold: 3.0
+  hard_brake_g_threshold: 0.7
+  hard_accel_g_threshold: 0.5
+  cornering_g_threshold: 0.6
+
+# ── GPIO ──
+gpio:
+  relay_cooling_fan: 17
+  relay_fuel_pump: 27
+  relay_headlights: 22
+  relay_dome_light: 23
+  relay_heated_seats: 24
+  relay_hvac_compressor: 25
+  relay_block_heater: 5
+  relay_power_antenna: 6
+  ignition_sense: 16
+  door_ajar: 26
+  trunk_ajar: 12
+  hood_ajar: 13
+  seatbelt: 19
+  i2c_bus: 1
+  mcp3008_cs: 8
+  mcp3008_spi_bus: 0
+
+# ── Audio ──
+audio:
+  enabled: true
+  input_device: plughw:1,0     # USB mic
+  output_device: plughw:0,0   # 3.5mm or USB DAC
+  sample_rate: 16000
+  channels: 1
+  chunk_size: 1024
+  wake_word: "hey hermes"
+  llm_api_url: http://localhost:8080/v1/chat/completions
+  llm_model: kimi-k2.6
+
+# ── Telegram ──
+telegram:
+  enabled: true
+  bot_token: "YOUR_BOT_TOKEN_HERE"
+  allowed_chat_ids: [123456789]
+  alert_on_collision: true
+  alert_on_geofence: true
+  alert_on_cel: true
+  alert_on_tow: true
+
+# ── Storage ──
+storage:
+  nvme_device: /dev/nvme0n1
+  mount_point: /mnt/nvme0n1p2
+  log_dir: /mnt/nvme0n1p2/logs
+  log_retention_days: 90
+  sqlite_path: /mnt/nvme0n1p2/camry.db
+  video_partition: /mnt/nvme0n1p2/video
+  luks_enabled: true
+  luks_keyfile: /etc/pi-camry/luks.key
+
+# ── Vehicle ──
+vehicle:
+  year: 1996
+  make: Toyota
+  model: Camry
+  engine: 5S-FE
+  vin: ""                        # Optional
+  oil_change_interval: 5000    # miles
+  tire_rotation_interval: 7500   # miles
