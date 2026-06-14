@@ -186,6 +186,61 @@ class VehicleConfig(BaseSettings):
     tire_rotation_interval: int = 7500
 
 
+class ModernVehicleConfig(BaseSettings):
+    """Modern vehicle (2008+) CAN/UDS/advanced sensor settings."""
+    model_config = SettingsConfigDict(env_prefix="MODERN_")
+
+    enabled: bool = False  # Only enable when attached to modern vehicle
+    # CAN multi-bus
+    can_fd_enabled: bool = False
+    can_fd_data_rate: int = 2000000  # 2 Mbps
+    # UDS transport
+    uds_transport: str = "can"  # 'can', 'doip', 'lin'
+    doip_gateway: str = "192.168.1.1"
+    # TPMS
+    tpms_receiver: str = "rtlsdr"  # 'rtlsdr', 'cc1101', 'serial'
+    tpms_frequency_hz: int = 315000000  # US
+    tpms_protocol: str = "schrader"
+    tpms_sensor_ids: list[int] = Field(default_factory=list)
+    # Radar
+    radar_front_enabled: bool = False
+    radar_rear_enabled: bool = False
+    # Driver monitor
+    dms_enabled: bool = False
+    dms_camera: str = "ir_pi"  # 'ir_pi', 'usb_ir'
+    # Interior sensing
+    interior_sensing_enabled: bool = False
+    interior_sensors: list[str] = Field(default_factory=lambda: ["scd4x", "sgp40"])
+
+
+class DisplayConfig(BaseSettings):
+    """JoyBring / head-unit display integration settings."""
+    model_config = SettingsConfigDict(env_prefix="DISPLAY_")
+
+    enabled: bool = True
+    # HDMI output
+    resolution: tuple[int, int] = (1024, 600)
+    hdmi_port: int = 0  # Pi 5 HDMI0
+    cec_enabled: bool = True
+    # Touch input
+    touch_device: str = "auto"  # 'auto', evdev path, or hidraw path
+    touch_max_x: int = 4095
+    touch_max_y: int = 4095
+    # Backlight
+    backlight_pwm_pin: int | None = None  # GPIO for PWM dimming
+    # CAN bridge
+    can_enabled: bool = False
+    can_dual_bus: bool = False
+    # Steering wheel control
+    swc_enabled: bool = False
+    swc_adc_channel: int = 0
+    # Dashboard GUI
+    dashboard_enabled: bool = True
+    # Radio
+    radio_mode: str = "headunit"  # 'headunit', 'si4703', 'internet'
+    radio_presets: list[tuple[str, float]] = Field(default_factory=list)
+
+
 class MainConfig(BaseSettings):
     """Top-level configuration. All sub-configs nest here."""
     model_config = SettingsConfigDict(
@@ -208,6 +263,8 @@ class MainConfig(BaseSettings):
     telegram: TelegramConfig = Field(default_factory=TelegramConfig)
     storage: StorageConfig = Field(default_factory=StorageConfig)
     vehicle: VehicleConfig = Field(default_factory=VehicleConfig)
+    display: DisplayConfig = Field(default_factory=DisplayConfig)
+    modern: ModernVehicleConfig = Field(default_factory=ModernVehicleConfig)
 
     @field_validator("data_dir", mode="before")
     @classmethod

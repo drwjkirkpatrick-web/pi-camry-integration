@@ -87,6 +87,31 @@ class EventType(Enum):
     SYSTEM_LOW_STORAGE = auto()
     SYSTEM_LOW_BATTERY = auto()
 
+    # Display events
+    DISPLAY_ON = auto()
+    DISPLAY_STANDBY = auto()
+    DISPLAY_NEXT_PAGE = auto()
+    DISPLAY_PREV_PAGE = auto()
+    DISPLAY_CHANGE_MODE = auto()
+
+    # Audio events
+    AUDIO_VOLUME_UP = auto()
+    AUDIO_VOLUME_DOWN = auto()
+    AUDIO_MUTE = auto()
+    AUDIO_CANCEL = auto()
+    WAKE_WORD_DETECTED = auto()
+
+    # Radio events
+    RADIO_PRESETS = auto()
+    RADIO_TUNE = auto()
+    RADIO_RDS = auto()
+
+    # Modern vehicle events
+    TPMS_READING = auto()
+    RADAR_TARGET = auto()
+    DRIVER_ALERT = auto()
+    INTERIOR_AIR_QUALITY = auto()
+
 
 @dataclass
 class Event:
