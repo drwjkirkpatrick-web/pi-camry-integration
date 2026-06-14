@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hermes Agent × Raspberry Pi 5 × 1996 Toyota Camry — Complete Integration Guide</title>
+<style>
+@page { size: A4; margin: 15mm; }
+body {
+  font-family: "DejaVu Sans", sans-serif;
+  font-size: 10pt;
+  line-height: 1.4;
+  color: #222;
+  max-width: 190mm;
+  margin: 0 auto;
+}
+h1 {
+  font-family: "DejaVu Sans Bold", "DejaVu Sans", sans-serif;
+  font-size: 18pt;
+  text-align: center;
+  margin-top: 40mm;
+  margin-bottom: 10mm;
+  color: #1a1a1a;
+}
+h2 {
+  font-family: "DejaVu Sans Bold", "DejaVu Sans", sans-serif;
+  font-size: 14pt;
+  margin-top: 8mm;
+  margin-bottom: 4mm;
+  color: #1a1a1a;
+  border-bottom: 1.5pt solid #333;
+  padding-bottom: 2mm;
+}
+h3 {
+  font-family: "DejaVu Sans Bold", "DejaVu Sans", sans-serif;
+  font-size: 11pt;
+  margin-top: 6mm;
+  margin-bottom: 3mm;
+  color: #222;
+}
+.cover {
+  text-align: center;
+  page-break-after: always;
+}
+.cover-subtitle {
+  font-size: 12pt;
+  color: #444;
+  margin-bottom: 20mm;
+}
+.cover-meta {
+  font-size: 10pt;
+  color: #666;
+  margin-top: 30mm;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+  margin: 4mm 0;
+}
+th, td {
+  border: 1pt solid #888;
+  padding: 2mm 2mm;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background: #eee;
+  font-family: "DejaVu Sans Bold", "DejaVu Sans", sans-serif;
+}
+pre {
+  font-family: "DejaVu Sans Mono", monospace;
+  font-size: 8pt;
+  background: #f5f5f5;
+  border: 1pt solid #ccc;
+  padding: 3mm;
+  overflow-x: auto;
+  line-height: 1.2;
+}
+.code {
+  font-family: "DejaVu Sans Mono", monospace;
+  font-size: 9pt;
+  background: #f5f5f5;
+  padding: 0.5mm 1mm;
+}
+.note {
+  background: #fffbe6;
+  border-left: 3pt solid #e6a700;
+  padding: 2mm 3mm;
+  margin: 3mm 0;
+  font-size: 9pt;
+}
+.warning {
+  background: #fff0f0;
+  border-left: 3pt solid #c00;
+  padding: 2mm 3mm;
+  margin: 3mm 0;
+  font-size: 9pt;
+}
+ul, ol {
+  margin: 2mm 0;
+  padding-left: 5mm;
+}
+li {
+  margin-bottom: 1mm;
+}
+.page-break {
+  page-break-before: always;
+}
+.integration-block {
+  border: 1pt solid #bbb;
+  padding: 3mm;
+  margin: 3mm 0;
+  background: #fafafa;
+}
+.integration-title {
+  font-family: "DejaVu Sans Bold", "DejaVu Sans", sans-serif;
+  font-size: 10pt;
+  margin-bottom: 1mm;
+}
+.integration-desc {
+  font-size: 9pt;
+  color: #333;
+}
+.gpio-table td:first-child {
+  font-family: "DejaVu Sans Mono", monospace;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <h1>Hermes Agent × Raspberry Pi 5 × 1996 Toyota Camry<br>Complete Integration Guide</h1>
+  <div class="cover-subtitle">
+    A comprehensive technical reference for integrating a Raspberry Pi 5<br>
+    into a 1996 Toyota Camry platform
+  </div>
+  <div class="cover-meta">
+    Version 1.0 &nbsp;|&nbsp; June 2026<br>
+    150 Integrations &nbsp;|&nbsp; Wiring Diagrams &nbsp;|&nbsp; GPIO Reference &nbsp;|&nbsp; Power Architecture
+  </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<h2>Table of Contents</h2>
+<ol>
+  <li>Parts List</li>
+  <li>GPIO Pinout Reference (Raspberry Pi 5)</li>
+  <li>Power Wiring Architecture</li>
+  <li>M.2 NVMe Storage Architecture</li>
+  <li>Video Recording Architecture</li>
+  <li>Integration Categories</li>
+  <li>Installation Steps</li>
+</ol>
+
+<!-- PARTS LIST -->
+<div class="page-break"></div>
+<h2>1. Parts List</h2>
+<table>
+  <tr>
+    <th>Part Name</th>
+    <th>Model / Part Number</th>
+    <th>Purpose</th>
+    <th>Price Est.</th>
+    <th>Supplier</th>
+  </tr>
+  <tr>
+    <td>Raspberry Pi 5</td>
+    <td>SC1111 / 8GB RAM</td>
+    <td>Main compute unit</td>
+    <td>$80</td>
+    <td>PiShop.us / Adafruit</td>
+  </tr>
+  <tr>
+    <td>Pi 5 Active Cooler</td>
+    <td>SC1148</td>
+    <td>Thermal management</td>
+    <td>$5</td>
+    <td>PiShop.us</td>
+  </tr>
+  <tr>
+    <td>M.2 NVMe HAT</td>
+    <td>Pineberry Pi HatDrive! Top / Waveshare</td>
+    <td>NVMe SSD interface</td>
+    <td>$25</td>
+    <td>Pineberry Pi / Amazon</td>
+  </tr>
+  <tr>
+    <td>NVMe SSD</td>
+    <td>Samsung 990 EVO 1TB</td>
+    <td>Mass storage (video/logs)</td>
+    <td>$90</td>
+    <td>Amazon / Newegg</td>
+  </tr>
+  <tr>
+    <td>12V→5V Buck Converter</td>
+    <td>LM2596S / XL4015 module</td>
+    <td>Power supply (12V→5V/5A)</td>
+    <td>$8</td>
+    <td>Amazon / AliExpress</td>
+  </tr>
+  <tr>
+    <td>Dual Camera Module</td>
+    <td>IMX219 8MP ×2 (or IMX708)</td>
+    <td>Front &amp; rear video capture</td>
+    <td>$60</td>
+    <td>Arducam / PiShop</td>
+  </tr>
+  <tr>
+    <td>Camera Cable Ext.</td>
+    <td>CSI-2 22-pin 1m ribbon</td>
+    <td>Camera routing in vehicle</td>
+    <td>$12</td>
+    <td>Arducam</td>
+  </tr>
+  <tr>
+    <td>OBD-II Adapter</td>
+    <td>ELM327 USB / STN1110</td>
+    <td>Vehicle diagnostic interface</td>
+    <td>$15</td>
+    <td>Amazon</td>
+  </tr>
+  <tr>
+    <td>GPS Module</td>
+    <td>u-blox NEO-M9N / USB GPS</td>
+    <td>Position &amp; speed logging</td>
+    <td>$35</td>
+    <td>SparkFun / Adafruit</td>
+  </tr>
+  <tr>
+    <td>4G/LTE Modem</td>
+    <td>Quectel EC25 / SIM7600G-H</td>
+    <td>Cellular connectivity</td>
+    <td>$45</td>
+    <td>Sixfab / Waveshare</td>
+  </tr>
+  <tr>
+    <td>ADS-B Receiver</td>
+    <td>RTL-SDR Blog v4</td>
+    <td>Air traffic monitoring</td>
+    <td>$35</td>
+    <td>RTL-SDR.com</td>
+  </tr>
+  <tr>
+    <td>TPMS Reader</td>
+    <td>RTL-SDR + rtl_433</td>
+    <td>Tire pressure monitoring</td>
+    <td>$35</td>
+    <td>RTL-SDR.com</td>
+  </tr>
+  <tr>
+    <td>USB Audio Interface</td>
+    <td>Behringer UCA222 / CM108</td>
+    <td>Aux audio in/out</td>
+    <td>$30</td>
+    <td>Amazon / Sweetwater</td>
+  </tr>
+  <tr>
+    <td>Relay Board</td>
+    <td>5V 4-channel relay module</td>
+    <td>Ignition / accessory control</td>
+    <td>$6</td>
+    <td>Amazon</td>
+  </tr>
+  <tr>
+    <td>Logic Level Shifter</td>
+    <td>TXS0108E / BSS138</td>
+    <td>3.3V↔5V signal translation</td>
+    <td>$4</td>
+    <td>Adafruit / Amazon</td>
+  </tr>
+  <tr>
+    <td>Fuse Tap Set</td>
+    <td>ATO/ATC add-a-circuit</td>
+    <td>Clean 12V tap from fusebox</td>
+    <td>$8</td>
+    <td>AutoZone / Amazon</td>
+  </tr>
+  <tr>
+    <td>Wiring Kit</td>
+    <td>18 AWG primary wire 100ft</td>
+    <td>Power &amp; signal distribution</td>
+    <td>$20</td>
+    <td>Amazon</td>
+  </tr>
+  <tr>
+    <td>Project Enclosure</td>
+    <td>ABS plastic 200×150×75mm</td>
+    <td>Pi housing under dash</td>
+    <td>$15</td>
+    <td>Amazon / Hammond</td>
+  </tr>
+  <tr>
+    <td>MicroSD Card</td>
+    <td>SanDisk Extreme 64GB</td>
+    <td>Boot / OS</td>
+    <td>$12</td>
+    <td>Amazon</td>
+  </tr>
+  <tr>
+    <td>USB Hub</td>
+    <td>Powered 7-port USB 3.0</td>
+    <td>Peripheral expansion</td>
+    <td>$18</td>
+    <td>Amazon</td>
+  </tr>
+  <tr>
+    <td>Accelerometer</td>
+    <td>MPU-6050 / LIS3DH (I2C)</td>
+    <td>G-force / crash detection</td>
+    <td>$5</td>
+    <td>Adafruit / Amazon</td>
+  </tr>
+  <tr>
+    <td>Temperature Sensor</td>
+    <td>BME280 (I2C)</td>
+    <td>Cabin / ambient temp/humidity</td>
+    <td>$8</td>
+    <td>Adafruit</td>
+  </tr>
+  <tr>
+    <td>LED Strip</td>
+    <td>WS2812B 5V 1m 60 LEDs</td>
+    <td>Ambient / status lighting</td>
+    <td>$10</td>
+    <td>Amazon</td>
+  </tr>
+  <tr>
+    <td>CAN Bus Interface</td>
+    <td>MCP2515 + TJA1050 (SPI)</td>
+    <td>Vehicle network (if equipped)</td>
+    <td>$12</td>
+    <td>Amazon / Seeed</td>
+  </tr>
+  <tr>
+    <td>USB-C Power Cable</td>
+    <td>Right-angle 1.5m 5A</td>
+    <td>Pi 5 power delivery</td>
+    <td>$8</td>
+    <td>Amazon</td>
+  </tr>
+  <tr>
+    <td>SIM Card</td>
+    <td>IoT data plan SIM</td>
+    <td>Cellular data</td>
+    <td>$10/mo</td>
+    <td>Hologram / Twilio</td>
+  </tr>
+</table>
+
+<div class="note">
+  <strong>Note:</strong> The 1996 Toyota Camry uses OBD-II (mandated from 1996 in the US). CAN bus may not be present on all 1996 models; verify under-dash connector pinout before purchasing CAN hardware.
+</div>
+
+<!-- GPIO PINOUT -->
+<div class="page-break"></div>
+<h2>2. GPIO Pinout Reference — Raspberry Pi 5</h2>
+<p>The Pi 5 40-pin header maintains backward compatibility with Pi 4 but adds a dedicated PCIe / power controller (RP1). Key pins for this integration:</p>
+
+<table class="gpio-table">
+  <tr>
+    <th>Pin</th><th>Name</th><th>Function</th><th>Used For</th>
+  </tr>
+  <tr><td>1</td><td>3.3V</td><td>Power</td><td>Sensors, level shifter VCCA</td></tr>
+  <tr><td>2</td><td>5V</td><td>Power</td><td>Relays, LED strip (via level shifter)</td></tr>
+  <tr><td>3</td><td>GPIO2</td><td>SDA1 (I2C)</td><td>I2C bus — BME280, MPU-6050, OLED</td></tr>
+  <tr><td>4</td><td>5V</td><td>Power</td><td>—</td></tr>
+  <tr><td>5</td><td>GPIO3</td><td>SCL1 (I2C)</td><td>I2C bus clock</td></tr>
+  <tr><td>6</td><td>GND</td><td>Ground</td><td>Common ground</td></tr>
+  <tr><td>7</td><td>GPIO4</td><td>GPCLK0</td><td>1-Wire (optional)</td></tr>
+  <tr><td>8</td><td>GPIO14</td><td>TXD0 (UART)</td><td>GPS / LTE AT console</td></tr>
+  <tr><td>9</td><td>GND</td><td>Ground</td><td>—</td></tr>
+  <tr><td>10</td><td>GPIO15</td><td>RXD0 (UART)</td><td>GPS / LTE AT console</td></tr>
+  <tr><td>11</td><td>GPIO17</td><td>GPIO</td><td>Relay CH1 (ignition sense)</td></tr>
+  <tr><td>12</td><td>GPIO18</td><td>PWM0</td><td>WS2812B LED strip data</td></tr>
+  <tr><td>13</td><td>GPIO27</td><td>GPIO</td><td>Relay CH2 (accessory cut)</td></tr>
+  <tr><td>14</td><td>GND</td><td>Ground</td><td>—</td></tr>
+  <tr><td>15</td><td>GPIO22</td><td>GPIO</td><td>Relay CH3 (camera power)</td></tr>
+  <tr><td>16</td><td>GPIO23</td><td>GPIO</td><td>Relay CH4 (LTE modem power)</td></tr>
+  <tr><td>17</td><td>3.3V</td><td>Power</td><td>—</td></tr>
+  <tr><td>18</td><td>GPIO24</td><td>GPIO</td><td>Alarm / buzzer output</td></tr>
+  <tr><td>19</td><td>GPIO10</td><td>MOSI (SPI)</td><td>SPI devices / CAN MCP2515</td></tr>
+  <tr><td>20</td><td>GND</td><td>Ground</td><td>—</td></tr>
+  <tr><td>21</td><td>GPIO9</td><td>MISO (SPI)</td><td>SPI devices / CAN MCP2515</td></tr>
+  <tr><td>22</td><td>GPIO25</td><td>GPIO</td><td>Status LED / heartbeat</td></tr>
+  <tr><td>23</td><td>GPIO11</td><td>SCLK (SPI)</td><td>SPI clock</td></tr>
+  <tr><td>24</td><td>GPIO8</td><td>CE0 (SPI)</td><td>CAN bus chip select</td></tr>
+  <tr><td>25</td><td>GND</td><td>Ground</td><td>—</td></tr>
+  <tr><td>26</td><td>GPIO7</td><td>CE1 (SPI)</td><td>Reserve SPI</td></tr>
+  <tr><td>27</td><td>ID_SD</td><td>I2C ID</td><td>HAT EEPROM</td></tr>
+  <tr><td>28</td><td>ID_SC</td><td>I2C ID</td><td>HAT EEPROM</td></tr>
+  <tr><td>29</td><td>GPIO5</td><td>GPIO</td><td>PIR / motion sensor</td></tr>
+  <tr><td>30</td><td>GND</td><td>Ground</td><td>—</td></tr>
+  <tr><td>31</td><td>GPIO6</td><td>GPIO</td><td>Door lock sense</td></tr>
+  <tr><td>32</td><td>GPIO12</td><td>PWM1</td><td>Fan PWM control</td></tr>
+  <tr><td>33</td><td>GPIO13</td><td>PWM1</td><td>Reserve PWM</td></tr>
+  <tr><td>34</td><td>GND</td><td>Ground</td><td>—</td></tr>
+  <tr><td>35</td><td>GPIO19</td><td>SPI1_MISO</td><td>Reserve</td></tr>
+  <tr><td>36</td><td>GPIO16</td><td>SPI1_CE2</td><td>Reserve</td></tr>
+  <tr><td>37</td><td>GPIO26</td><td>GPIO</td><td>Reserve</td></tr>
+  <tr><td>38</td><td>GPIO20</td><td>SPI1_MOSI</td><td>Reserve</td></tr>
+  <tr><td>39</td><td>GND</td><td>Ground</td><td>—</td></tr>
+  <tr><td>40</td><td>GPIO21</td><td>SPI1_SCLK</td><td>Reserve</td></tr>
+</table>
+
+<div class="note">
+  <strong>Pi 5 specific:</strong> UART now routes through RP1; enable via <span class="code">raspi-config</span> or <span class="code">/boot/firmware/config.txt</span>. PCIe M.2 uses the new FPC connector (not GPIO pins).
+</div>
+
+<!-- POWER WIRING -->
+<div class="page-break"></div>
+<h2>3. Power Wiring Architecture</h2>
+
+<h3>3.1 12V→5V Buck Converter</h3>
+<pre>
+   Camry Battery (+)  ─────┬── Fuse 10A ────→  Buck IN+  ────→  5V/5A OUT+  ───→  Pi 5 USB-C VBUS
+   (Terminal / fusebox)   │                                              │
+                          │                                              ├──→  USB Hub VBUS
+                          │                                              ├──→  Relay board VCC
+                          │                                              ├──→  LTE modem (via relay)
+                          │                                              └──→  Camera modules (via relay)
+   Camry Chassis GND  ────┴────────────────────────────────────────────→  Buck GND / Pi GND
+</pre>
+
+<h3>3.2 Ignition-Switched vs Always-On Circuits</h3>
+<table>
+  <tr><th>Circuit</th><th>Source</th><th>Fuse</th><th>Purpose</th></tr>
+  <tr><td>Always-On 12V</td><td>Battery + / Fusebox BAT</td><td>15A</td><td>Buck converter input, LTE modem (standby), GPS backup</td></tr>
+  <tr><td>Ignition-Switched 12V</td><td>IG1 / ACC fuse tap</td><td>10A</td><td>Pi main power, cameras, USB hub, relays</td></tr>
+  <tr><td>Accessory 12V</td><td>ACC circuit</td><td>5A</td><td>LED strip, display backlight</td></tr>
+</table>
+
+<h3>3.3 Relay Logic</h3>
+<pre>
+   Ignition Sense (GPIO17) ──→  Opto-isolator ──→  Relay CH1
+   Relay CH1 (NC/NO) ──→  Controls 12V feed to Buck IN+ (or Pi 5V enable)
+
+   Software watchdog:
+     - If ignition OFF &amp; no activity for 10 min → GPIO27 triggers Relay CH2
+     - Relay CH2 cuts USB hub &amp; camera power
+     - Pi enters low-power mode (rtcwake or systemd suspend)
+     - LTE modem stays on minimal heartbeat (if configured)
+</pre>
+
+<div class="warning">
+  <strong>Warning:</strong> Always fuse both +12V lines within 150mm of the battery or fusebox tap. Use automotive ATO/ATC fuses rated for continuous load. The buck converter MUST be rated for automotive transient suppression (load dump / ISO 7637-2 pulse 5a). Add a TVS diode (SMBJ24A) across buck input.
+</div>
+
+<!-- M.2 NVMe -->
+<div class="page-break"></div>
+<h2>4. M.2 NVMe Storage Architecture</h2>
+
+<p>The Pi 5 exposes a single-lane PCIe 2.0 interface via a dedicated FPC connector. An M.2 HAT (or HAT+ adapter) converts this to an M.2 2230/2242/2280 slot.</p>
+
+<h3>4.1 Physical Topology</h3>
+<pre>
+   Pi 5 SoC (BCM2712)
+        │
+        ├── PCIe x1 Gen2 (5 GT/s) via FPC
+        │
+        └── M.2 HAT (RP1-managed power sequencing)
+                 │
+                 ├── M.2 Key-M slot (NVMe SSD)
+                 │      └── Samsung 990 EVO 1TB (or WD SN770)
+                 │
+                 └── Jumper: enable/disable SSD power (for safe shutdown)
+</pre>
+
+<h3>4.2 Storage Partitioning Strategy</h3>
+<table>
+  <tr><th>Partition</th><th>Size</th><th>Mount</th><th>Purpose</th></tr>
+  <tr><td>/dev/nvme0n1p1</td><td>500MB</td><td>/boot/firmware</td><td>Bootloader + kernel (optional, can boot from SD)</td></tr>
+  <tr><td>/dev/nvme0n1p2</td><td>32GB</td><td>/</td><td>Root filesystem (OS + apps)</td></tr>
+  <tr><td>/dev/nvme0n1p3</td><td>64GB</td><td>/var/log</td><td>Structured logs (OBD, GPS, accelerometer)</td></tr>
+  <tr><td>/dev/nvme0n1p4</td><td>Remaining</td><td>/mnt/video</td><td>Rolling video buffer + encrypted archive</td></tr>
+</table>
+
+<h3>4.3 Enable NVMe Boot</h3>
+<pre class="code">
+# /boot/firmware/config.txt
+[all]
+dtparam=pciex1
+dtparam=nvme
+</pre>
+
+<div class="note">
+  <strong>Note:</strong> As of mid-2024 firmware, Pi 5 supports NVMe boot. Update bootloader first: <span class="code">sudo rpi-eeprom-update -a</span>. Use <span class="code">lsnvme</span> or <span class="code">ls /dev/nvme*</span> to verify detection.
+</div>
+
+<!-- VIDEO RECORDING -->
+<div class="page-break"></div>
+<h2>5. Video Recording Architecture</h2>
+
+<h3>5.1 Dual Camera Setup</h3>
+<pre>
+   Pi 5 CSI-2 port 0 (CAM0) ──→  22-pin FPC extender ──→  Front camera (IMX219)
+        │                                                    Windshield mount
+        │                                                    1080p30 / 720p60
+        │
+        └── CSI-2 port 1 (CAM1) ──→  22-pin FPC extender ──→  Rear camera (IMX219)
+                                                               Rear window mount
+                                                               1080p30 / 720p60
+</pre>
+
+<h3>5.2 Rolling Buffer &amp; Encryption Pipeline</h3>
+<pre>
+   Camera 0/1 (YUV/RGB) ──→  libcamera-vid / rpicam-vid  ──→  H.264/H.265 encoder (hardware)
+                                                                   │
+                                                                   ├──→  RAM ring buffer (5 min, ~1.5GB)
+                                                                   │       └── Emergency save on G-shock / GPIO trigger
+                                                                   │
+                                                                   └──→  NVMe partition /mnt/video
+                                                                               │
+                                                                               ├──→  Hourly segments (MP4/MKV)
+                                                                               │       └── Rotation: keep last 48h
+                                                                               │
+                                                                               └──→  Encrypted archive (LUKS or gocryptfs)
+                                                                                       └── Long-term incidents (passphrase or keyfile)
+</pre>
+
+<h3>5.3 Software Stack</h3>
+<table>
+  <tr><th>Component</th><th>Package / Tool</th><th>Role</th></tr>
+  <tr><td>Camera driver</td><td>libcamera / rpicam-apps</td><td>Capture &amp; tuning</td></tr>
+  <tr><td>Encoder</td><td>FFmpeg (V4L2 M2M)</td><td>Hardware H.264 encode</td></tr>
+  <tr><td>Segmenter</td><td>FFmpeg -f segment</td><td>Split by time</td></tr>
+  <tr><td>Buffer manager</td><td>tmpfs + inotify</td><td>RAM ring buffer</td></tr>
+  <tr><td>Encryption</td><td>gocryptfs / LUKS</td><td>At-rest protection</td></tr>
+  <tr><td>Trigger</td><td>MPU-6050 + GPIO</td><td>Crash / motion detect</td></tr>
+</table>
+
+<div class="note">
+  <strong>Tip:</strong> For a 1996 Camry without built-in camera power lines, run fused 5V from the buck converter directly to camera modules. Keep CSI-2 ribbon cables away from ignition coil wiring to reduce EMI.
+</div>
+
+<!-- INTEGRATIONS -->
+<div class="page-break"></div>
+<h2>6. Integration Categories (150 Total)</h2>
+
+<h3>6.1 Engine (15 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">E01 — OBD-II Live Data Stream</div>
+  <div class="integration-desc">Read RPM, MAP, coolant temp, throttle position, fuel trim via ELM327 USB. Poll at 10Hz. Log to SQLite.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E02 — Check Engine Light Decoder</div>
+  <div class="integration-desc">Parse DTCs (P0xxx, B0xxx). Cross-reference with Toyota service manual. Display plain-text fault on OLED.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E03 — Fuel Economy Calculator</div>
+  <div class="integration-desc">Compute MPG from MAF or fuel injector duty cycle (if available). Store per-trip averages.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E04 — Engine Warm-Up Timer</div>
+  <div class="integration-desc">Track coolant temp rise from cold start. Alert when optimal temp reached.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E05 — Knock Sensor Monitor</div>
+  <div class="integration-desc">If OBD exposes knock retard, log events. Correlate with accelerometer data.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E06 — Battery Health Logger</div>
+  <div class="integration-desc">Log voltage (via INA219 on 12V rail) and crank voltage dip. Predict battery replacement.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E07 — Alternator Output Monitor</div>
+  <div class="integration-desc">Monitor 14V rail stability. Alert on under/over-voltage conditions.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E08 — Oil Pressure Proxy</div>
+  <div class="integration-desc">1996 Camry oil pressure switch is binary. Log open/closed state; infer pressure from RPM/load model.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E09 — Exhaust Temp Estimator</div>
+  <div class="integration-desc">Model EGT from OBD2 coolant temp, intake air temp, and fuel trim.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E10 — Ignition Timing Logger</div>
+  <div class="integration-desc">Log spark advance from OBD. Detect knock-related retard patterns.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E11 — Idle Speed Tracker</div>
+  <div class="integration-desc">Monitor idle RPM stability. Detect vacuum leaks or IAC issues.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E12 — Air/Fuel Ratio Display</div>
+  <div class="integration-desc">Display calculated AFR from narrowband O2 sensor (via OBD) or wideband if added.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E13 — EGR Flow Monitor</div>
+  <div class="integration-desc">Log EGR commanded vs actual (if supported by ECU).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E14 — Transmission Shift Logger</div>
+  <div class="integration-desc">Log gear position (A340E solenoid states via OBD if exposed). Count shifts per trip.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">E15 — Predictive Maintenance Score</div>
+  <div class="integration-desc">ML model (scikit-learn on Pi) scoring engine health from multi-sensor trends.</div>
+</div>
+
+<h3>6.2 Safety (12 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">S01 — Forward Collision Warning (Camera)</div>
+  <div class="integration-desc">OpenCV-based vehicle detection on front camera. Audio alert if TTC &lt; 2.5s.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">S02 — Lane Departure Warning</div>
+  <div class="integration-desc">Hough transform lane detection. Alert on unintended lane change (no turn signal).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">S03 — Rear Cross-Traffic Alert</div>
+  <div class="integration-desc">Rear camera motion detection when in reverse (detected via OBD gear or backup light tap).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">S04 — Blind Spot Monitor (Camera)</div>
+  <div class="integration-desc">Side mirror mounted USB camera (optional). Optical flow object tracking.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">S05 — G-Force / Crash Detection</div>
+  <div class="integration-desc">MPU-6050 at 1kHz. Trigger emergency video save + SMS alert on &gt;3G impact.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">S06 — Driver Drowsiness Detection</div>
+  <div class="integration-desc">USB cabin camera + face landmarks. Alert on prolonged eye closure.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">S07 — Speed Limit Overlay</div>
+  <div class="integration-desc">GPS + OpenStreetMap speed limit data. HUD-style audio warning on exceed.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">S08 — Emergency Brake Light Flash</div>
+  <div class="integration-desc">Rapid deceleration (&gt;0.4G) triggers relay to flash brake lights (where legal).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">S09 — Tire Pressure Monitor (RTL-SDR)</div>
+  <div class="integration-desc">rtl_433 reads 315/433MHz TPMS sensors. Display pressure &amp; temp per tire.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">S10 — Flood / Water Ingress Sensor</div>
+  <div class="integration-desc">Capacitive water sensor in spare tire well. Alert if water detected.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">S11 — Post-Crash Auto-Notify</div>
+  <div class="integration-desc">On crash detect: LTE modem sends GPS coordinates + timestamp to emergency contact.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">S12 — Backup Battery Monitor</div>
+  <div class="integration-desc">Monitor backup 12V battery (if installed) for dashcam continuity during main battery disconnect.</div>
+</div>
+
+<h3>6.3 Navigation (10 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">N01 — GPS Position Logging</div>
+  <div class="integration-desc">u-blox NEO-M9N at 10Hz. Log to GPX for trip replay.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">N02 — Offline Maps (OSM)</div>
+  <div class="integration-desc">Pre-rendered OSM tiles on NVMe. Navit or OSMAnd-like renderer.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">N03 — Turn-by-Turn Voice</div>
+  <div class="integration-desc">Open-source routing engine (OSRM/Valhalla). TTS via espeak or Piper.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">N04 — Traffic Overlay (LTE)</div>
+  <div class="integration-desc">Fetch live traffic via LTE. Overlay on offline map.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">N05 — POI Database</div>
+  <div class="integration-desc">Custom POI: gas stations, Toyota dealers, rest stops. SQLite geospatial index.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">N06 — Route Efficiency Scorer</div>
+  <div class="integration-desc">Score routes by fuel economy history on that road segment.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">N07 — Parking Spot Logger</div>
+  <div class="integration-desc">Auto-save GPS on ignition off. Navigate back to car.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">N08 — Elevation Profile</div>
+  <div class="integration-desc">SRTM elevation data. Display grade and predicted fuel impact.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">N09 — Compass / Heading</div>
+  <div class="integration-desc">GPS course + magnetometer (QMC5883). Display on OLED or web UI.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">N10 — Geo-Fencing Alerts</div>
+  <div class="integration-desc">Alert when vehicle enters/exits defined zones (home, work, restricted).</div>
+</div>
+
+<h3>6.4 Infotainment (12 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">I01 — Local Music Server</div>
+  <div class="integration-desc">MPD (Music Player Daemon) serving FLAC/MP3 from NVMe. Web control via Rompr.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">I02 — FM Radio (RTL-SDR)</div>
+  <div class="integration-desc">rtl_fm for FM demod. Software RDS decoder for station info.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">I03 — Bluetooth Audio (A2DP)</div>
+  <div class="integration-desc">Pi 5 built-in Bluetooth + PulseAudio. Stream from phone.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">I04 — Podcast Downloader</div>
+  <div class="integration-desc">gPodder / cron + wget. Auto-download over WiFi (home) or LTE.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">I05 — Web Dashboard</div>
+  <div class="integration-desc">Flask/FastAPI served on localhost. Displayed via 7" DSI touchscreen or tablet.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">I06 — Voice Assistant (Local)</div>
+  <div class="integration-desc">Whisper (STT) + Piper (TTS) + local LLM (llama.cpp). No cloud required.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">I07 — Audio EQ / DSP</div>
+  <div class="integration-desc">CamillaDSP for FIR/IIR filtering. Room correction via mic (optional).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">I08 — Video Playback</div>
+  <div class="integration-desc">Kodi or VLC. Only when parked (ignition OFF + handbrake sense).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">I09 — USB Media Import</div>
+  <div class="integration-desc">Auto-mount USB → rsync to NVMe music library on insert.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">I10 — Backup Camera Auto-Display</div>
+  <div class="integration-desc">Detect reverse via OBD or backup light tap → switch display to rear camera.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">I11 — OBD Data HUD</div>
+  <div class="integration-desc">Real-time dash: RPM, speed, coolant temp, MPG on touchscreen.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">I12 — Steering Wheel Controls</div>
+  <div class="integration-desc">Resistive ladder from factory wheel → ADC (MCP3008) → volume/skip commands.</div>
+</div>
+
+<h3>6.5 Climate (8 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">C01 — Cabin Temperature Monitor</div>
+  <div class="integration-desc">BME280 inside dash. Log temp/humidity. Detect HVAC effectiveness.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">C02 — Ambient Temperature Display</div>
+  <div class="integration-desc">External BME280 in front grille (weatherproofed). Display on dash.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">C03 — HVAC Status Logger</div>
+  <div class="integration-desc">Tap AC clutch wire + blend door servo PWM (if accessible). Log on/off states.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">C04 — Pre-Condition Timer</div>
+  <div class="integration-desc">Scheduled engine start not recommended (safety). Instead: alert if cabin &gt;90°F on parked car.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">C05 — Air Quality (VOC/CO2)</div>
+  <div class="integration-desc">SGP30 or SCD40 sensor. Alert on high VOC; suggest recirculate.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">C06 — Solar Load Estimator</div>
+  <div class="integration-desc">Use GPS time + heading + external temp to model cabin solar heating.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">C07 — Defrost Reminder</div>
+  <div class="integration-desc">If ambient &lt;5°C and humidity &gt;85%, remind driver to enable defrost.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">C08 — Cabin Air Filter Timer</div>
+  <div class="integration-desc">Track HVAC hours. Remind replacement at 200h (Toyota spec).</div>
+</div>
+
+<h3>6.6 Security (12 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">SEC01 — GPS Tracker / Anti-Theft</div>
+  <div class="integration-desc">LTE modem reports GPS every 60s when ignition off. Geofence breach alert.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">SEC02 — Motion-Activated Recording</div>
+  <div class="integration-desc">PIR or camera motion detection when parked. Save to encrypted partition.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">SEC03 — Remote Lock/Unlock (via SMS)</div>
+  <div class="integration-desc">SMS command to LTE modem → GPIO relay to door lock actuator (parallel to factory).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">SEC04 — Ignition Kill Switch</div>
+  <div class="integration-desc">Relay in starter circuit. Disable via authenticated SMS/app.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">SEC05 — Alarm Siren Integration</div>
+  <div class="integration-desc">Tap into factory alarm horn or add standalone siren. Trigger on unauthorized entry.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">SEC06 — Glass Break Detection</div>
+  <div class="integration-desc">Audio FFT analysis on USB mic. Detect glass break frequency signature.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">SEC07 — Key Fob Signal Logger</div>
+  <div class="integration-desc">RTL-SDR logs 315MHz key fob transmissions. Detect replay attacks.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">SEC08 — Cabin Occupancy Detection</div>
+  <div class="integration-desc">PIR + ultrasonic. Alert if child/pet left in parked car (temp &gt; threshold).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">SEC09 — Tamper Detection</div>
+  <div class="integration-desc">Case open switch + accelerometer. Alert if Pi enclosure accessed.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">SEC10 — Remote Engine Start (with caveats)</div>
+  <div class="integration-desc">SMS triggers starter relay. Only with manual transmission interlock and brake sense.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">SEC11 — Trunk Open Alert</div>
+  <div class="integration-desc">Tap trunk latch switch. Alert if left open &gt;5 min.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">SEC12 — Valet Mode</div>
+  <div class="integration-desc">Geofence + speed limiter logging. Notify owner if valet exceeds boundaries.</div>
+</div>
+
+<h3>6.7 Lighting (10 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">L01 — Ambient LED Strip Control</div>
+  <div class="integration-desc">WS2812B under dash / footwells. Color temp matches time of day.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">L02 — Headlight Auto-On</div>
+  <div class="integration-desc">Photoresistor + GPS sunset data. Auto-enable headlights via relay if driver forgets.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">L03 — Brake Light Strobe</div>
+  <div class="integration-desc">Rapid flash on hard braking (relay tapped into brake switch wire).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">L04 — Turn Signal Monitor</div>
+  <div class="integration-desc">Log turn signal usage. Alert if left on &gt;2 min (lane change vs turn).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">L05 — Interior Light Delay</div>
+  <div class="integration-desc">Extend dome light timeout after ignition off (relay controlled).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">L06 — License Plate Illumination Check</div>
+  <div class="integration-desc">Current sense on plate light circuit. Alert if bulb out.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">L07 — Fog Light Logic</div>
+  <div class="integration-desc">Prevent fog light use when high beams on (compliance). Log usage.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">L08 — Welcome / Puddle Lights</div>
+  <div class="integration-desc">Unlock signal → fade-on footwell LEDs for 30s.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">L09 — Reverse Light Current Monitor</div>
+  <div class="integration-desc">INA219 on reverse circuit. Detect bulb failure or trailer load.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">L10 — Daytime Running Light Dimming</div>
+  <div class="integration-desc">PWM dim DRLs (if LED retrofitted) when turn signal active.</div>
+</div>
+
+<h3>6.8 Data Logging (15 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">DL01 — Trip Computer</div>
+  <div class="integration-desc">Distance, time, avg speed, fuel used, cost per trip. SQLite backend.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL02 — OBD2 Data Historian</div>
+  <div class="integration-desc">Time-series DB (InfluxDB or TimescaleDB). Retention: 2 years.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL03 — GPS Track Archive</div>
+  <div class="integration-desc">GPX + GeoJSON export. Search by date, location, or event.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL04 — Video Event Archive</div>
+  <div class="integration-desc">Encrypted storage of flagged events (crash, horn, manual trigger).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL05 — Accelerometer Black Box</div>
+  <div class="integration-desc">1kHz XYZ log for 30s pre/post crash. Circular buffer in RAM.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL06 — CAN Bus Logger (if equipped)</div>
+  <div class="integration-desc">MCP2515 dumps all frames to candump format. Parse with python-can.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL07 — Fuel Purchase Logger</div>
+  <div class="integration-desc">Manual entry via web UI. Compute price trends and MPG per fill-up.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL08 — Maintenance Schedule Tracker</div>
+  <div class="integration-desc">Mileage/time-based reminders: oil, tires, belts, coolant.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL09 — Driving Behavior Score</div>
+  <div class="integration-desc">Score: harsh accel/brake/cornering. Gamify efficient driving.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL10 — Emissions Readiness Monitor</div>
+  <div class="integration-desc">Track OBD readiness bits. Alert before smog test if not ready.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL11 — Weather Correlation</div>
+  <div class="integration-desc">Fetch weather API data per trip. Correlate temp/humidity with MPG.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL12 — Tire Wear Estimator</div>
+  <div class="integration-desc">Log mileage + alignment G-forces. Estimate tread depth over time.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL13 — Battery Cycle Counter</div>
+  <div class="integration-desc">Count deep discharges. Predict replacement at 80% capacity.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL14 — Oil Change Interval Optimizer</div>
+  <div class="integration-desc">Adjust interval based on driving style (short trips vs highway).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">DL15 — Remote Data Sync</div>
+  <div class="integration-desc">rsync / rclone to home NAS or cloud (encrypted) when on home WiFi.</div>
+</div>
+
+<h3>6.9 AI / LLM (10 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">AI01 — Local LLM (llama.cpp)</div>
+  <div class="integration-desc">Run quantized LLM (Llama 3 8B Q4) on Pi 5 (8GB). ~4 tok/s. Offline capable.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">AI02 — Voice Assistant (Hermes Agent)</div>
+  <div class="integration-desc">Wake word → Whisper STT → local LLM → Piper TTS. Full pipeline on-device.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">AI03 — OBD Fault Code Explainer</div>
+  <div class="integration-desc">LLM receives DTC + live data. Explains likely cause and fix in plain English.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">AI04 — Predictive Maintenance (ML)</div>
+  <div class="integration-desc">Scikit-learn regression on sensor trends. Predict component failure 500mi ahead.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">AI05 — License Plate Reader (ANPR)</div>
+  <div class="integration-desc">OpenALPR or custom YOLO+OCR on rear camera. Log plates in proximity.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">AI06 — Object Detection (Coral TPU)</div>
+  <div class="integration-desc">USB Coral Edge TPU for 30fps MobileNet SSD. Pedestrian/cyclist alert.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">AI07 — Natural Language Vehicle Queries</div>
+  <div class="integration-desc">"What's my coolant temp?" → LLM queries DB → spoken response.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">AI08 — Summarize Drive Logs</div>
+  <div class="integration-desc">LLM summarizes daily trips, anomalies, and recommendations.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">AI09 — Sentiment Analysis (Cabin Audio)</div>
+  <div class="integration-desc">Detect driver stress from voice tone (optional, privacy-sensitive).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">AI10 — Image Captioning (Cameras)</div>
+  <div class="integration-desc">BLIP / LLaVA on snapshots. "Describe what the front camera sees."</div>
+</div>
+
+<h3>6.10 Power Management (10 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">PM01 — Smart Shutdown Controller</div>
+  <div class="integration-desc">Ignition OFF → 10 min timer → graceful shutdown → relay cuts 5V.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">PM02 — Deep Sleep / RTC Wake</div>
+  <div class="integration-desc">Pi 5 suspend-to-RAM. RTC alarm wakes for scheduled tasks.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">PM03 — Battery Voltage Logger</div>
+  <div class="integration-desc">INA219 on 12V rail. Log every 10s. Plot voltage curves.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">PM04 — Solar Panel Input (Optional)</div>
+  <div class="integration-desc">20W solar on rear deck → MPPT controller → trickle charge battery.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">PM05 — Load Shedding</div>
+  <div class="integration-desc">If battery &lt;12.0V, sequentially cut: cameras → LTE → Pi (hibernate).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">PM06 — Power Budget Calculator</div>
+  <div class="integration-desc">Real-time sum of all loads. Alert if exceeding alternator capacity at idle.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">PM07 — USB Port Power Control</div>
+  <div class="integration-desc">Per-port power switching via smart hub or GPIO-controlled MOSFETs.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">PM08 — Alternator Load Balancer</div>
+  <div class="integration-desc">Defer high-power tasks (video encode, LLM inference) until RPM &gt;1500.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">PM09 — Supercapacitor UPS (Optional)</div>
+  <div class="integration-desc">10F supercap bank provides 10s ride-through for safe shutdown.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">PM10 — Thermal Throttling Monitor</div>
+  <div class="integration-desc">Log CPU temp. Reduce load if &gt;80°C. Control fan PWM via GPIO12.</div>
+</div>
+
+<h3>6.11 M.2 / Video (8 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">MV01 — NVMe Boot</div>
+  <div class="integration-desc">Boot Pi 5 directly from NVMe SSD. Faster I/O, larger storage.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">MV02 — Dual CSI Camera Capture</div>
+  <div class="integration-desc">Simultaneous 1080p30 front + rear via libcamera. HW encode to H.264.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">MV03 — Rolling Buffer Manager</div>
+  <div class="integration-desc">tmpfs ring buffer (5 min). Auto-save on trigger. Offload to NVMe.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">MV04 — Encrypted Video Vault</div>
+  <div class="integration-desc">gocryptfs on /mnt/video. Keyfile on USB or passphrase on boot.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">MV05 — HDMI Output (Dash Display)</div>
+  <div class="integration-desc">Pi 5 dual HDMI: one for dash touchscreen, one for rear passenger.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">MV06 — DSI Touchscreen</div>
+  <div class="integration-desc">Official 7" DSI display + touch overlay for main dash UI.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">MV07 — Video Streaming (WiFi AP)</div>
+  <div class="integration-desc">RTSP server for camera feeds. View on phone/tablet connected to Pi AP.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">MV08 — GStreamer Pipeline</div>
+  <div class="integration-desc">Custom GStreamer for mux, encode, segment, and encrypt in one pipeline.</div>
+</div>
+
+<h3>6.12 Body (10 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">B01 — Door Open/Close Logger</div>
+  <div class="integration-desc">Tap door jamb switches. Log each event with timestamp and GPS.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">B02 — Hood / Trunk Status</div>
+  <div class="integration-desc">Magnetic reed switches. Alert if open while driving or parked.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">B03 — Seat Occupancy Sensor</div>
+  <div class="integration-desc">Pressure mat or factory occupancy sensor tap. Enable passenger airbag logic display.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">B04 — Window Position Estimator</div>
+  <div class="integration-desc">Time-based estimation from window switch current sense. Alert if rain detected.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">B05 — Sunroof Position</div>
+  <div class="integration-desc">Hall effect or limit switch tap. Auto-close if rain + parked.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">B06 — Mirror Position Memory</div>
+  <div class="integration-desc">Tap mirror adjust motor wires. Save/recall positions per driver profile.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">B07 — Wiper Speed Logger</div>
+  <div class="integration-desc">Tap wiper motor low/high wires. Correlate with rain sensor (if added).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">B08 — Washer Fluid Level</div>
+  <div class="integration-desc">Float switch or capacitive sensor in reservoir. Alert if low.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">B09 — Odometer Sync</div>
+  <div class="integration-desc">Log GPS distance + OBD distance. Detect odometer discrepancy (tamper check).</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">B10 — Paint / UV Exposure Logger</div>
+  <div class="integration-desc">UV sensor on exterior. Log cumulative exposure for paint care advice.</div>
+</div>
+
+<h3>6.13 Fuel (8 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">F01 — Fuel Level Monitor</div>
+  <div class="integration-desc">OBD fuel level % (if supported) or analog tap on sender unit. Log with GPS.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">F02 — Fuel Economy Real-Time</div>
+  <div class="integration-desc">Instant and average MPG from MAF or injector duty cycle.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">F03 — Fuel Station Finder</div>
+  <div class="integration-desc">POI DB + current fuel level. Suggest station before empty.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">F04 — Fuel Price Tracker</div>
+  <div class="integration-desc">Manual entry + GasBuddy API (LTE). Log cheapest stations on route.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">F05 — Ethanol Content Estimator</div>
+  <div class="integration-desc">If flex-fuel sensor not present, estimate from fuel trim and O2 response.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">F06 — Fuel Theft Detection</div>
+  <div class="integration-desc">Sudden fuel level drop while parked + no ignition. Alert via LTE.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">F07 — Range Estimator</div>
+  <div class="integration-desc">Compute remaining range from fuel level / recent MPG. Display on dash.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">F08 — Fuel System Leak Detection</td>
+  <div class="integration-desc">Monitor fuel trim long-term. Large positive LTFT may indicate vacuum leak (acts like lean condition).</div>
+</div>
+
+<h3>6.14 Communication (12 integrations)</h3>
+<div class="integration-block">
+  <div class="integration-title">COM01 — 4G/LTE Internet</div>
+  <div class="integration-desc">Quectel EC25 via USB. wwan0 interface. NetworkManager for auto-connect.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">COM02 — WiFi Hotspot</div>
+  <div class="integration-desc">hostapd on Pi 5. Share LTE to passengers. WPA3 if supported.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">COM03 — SMS Gateway</div>
+  <div class="integration-desc">Receive commands via SMS. Send alerts. gammu or custom AT parser.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">COM04 — GPS NMEA Stream</div>
+  <div class="integration-desc">gpsd on /dev/ttyUSB0. Share to all apps via localhost:2947.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">COM05 — Bluetooth OBD</div>
+  <div class="integration-desc">ELM327 Bluetooth → rfcomm → python-obd. Wireless OBD option.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">COM06 — ADS-B Receiver</div>
+  <div class="integration-desc">RTL-SDR + dump1090. Display nearby aircraft on map. log to local DB.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">COM07 — AIS Marine Receiver</div>
+  <div class="integration-desc">RTL-SDR + rtl_ais. If near coast, log vessel traffic.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">COM08 — LoRa Mesh (Optional)</div>
+  <div class="integration-desc">SX1262 HAT. Off-grid text comms with other vehicles / base station.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">COM09 — MQTT Telemetry</div>
+  <div class="integration-desc">Publish sensor data to home MQTT broker (over LTE). Home Assistant integration.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">COM10 — Remote SSH Access</div>
+  <div class="integration-desc">Reverse SSH tunnel or Tailscale. Administer Pi from anywhere.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">COM11 — Over-the-Air Updates</div>
+  <div class="integration-desc">A/B partition or rsync-based OTA. Download on WiFi; apply on next boot.</div>
+</div>
+<div class="integration-block">
+  <div class="integration-title">COM12 — Emergency Beacon</div>
+  <div class="integration-desc">On crash + no cell: cycle through bands (LTE → 2G → LoRa) to send SOS.</div>
+</div>
+
+<!-- WIRING DIAGRAMS -->
+<div class="page-break"></div>
+<h2>7. Wiring Diagrams</h2>
+
+<h3>7.1 Overall System Block Diagram</h3>
+<pre>
+ +------------------+        +------------------+        +------------------+
+ |  1996 Camry      |        |   12V→5V Buck    |        |  Raspberry Pi 5  |
+ |  Battery 12V     |------->|   Converter 5A   |------->|  USB-C Power     |
+ |  Fusebox         |        |  (TVS protected) |        |  (Active Cooler) |
+ +------------------+        +------------------+        +--------+---------+
+        |                                                           |
+        | Ignition Switched 12V                                     | PCIe FPC
+        v                                                           v
+ +------------------+                                        +------------------+
+ |  Relay Board     |                                        |  M.2 NVMe HAT    |
+ |  (4CH, 5V coil)  |<--- GPIO17/27/22/23 ------------------>|  Samsung 990 EVO |
+ +------------------+                                        |  1TB             |
+        |                                                    +------------------+
+        | Relay contacts                                          |
+        v                                                         | CSI-0 / CSI-1
+ +------------------+                                        +----v-------------+
+ |  Accessory Power |                                        |  Cameras (×2)    |
+ |  (Cameras, Hub)  |                                        |  IMX219 8MP      |
+ +------------------+                                        +------------------+
+        |                                                           |
+        | 12V always-on                                               | USB 3.0
+        v                                                           v
+ +------------------+                                        +------------------+
+ |  LTE Modem       |<--- USB Hub ---------------------------->|  USB Hub (7pt)   |
+ |  (Quectel EC25)  |<--- USB -------------------------------->|  (Self-powered)  |
+ +------------------+                                        +------------------+
+        |                                                           |
+        | UART / I2C / SPI                                            | USB
+        v                                                           v
+ +------------------+                                        +------------------+
+ |  GPS (u-blox)    |                                        |  RTL-SDR (×2)    |
+ |  MPU-6050 (I2C)  |                                        |  OBD ELM327      |
+ |  BME280 (I2C)    |                                        |  USB Audio       |
+ |  MCP2515 (SPI)   |                                        |  Coral TPU (opt) |
+ +------------------+                                        +------------------+
+</pre>
+
+<h3>7.2 Ignition &amp; Relay Wiring Detail</h3>
+<pre>
+   Camry Fusebox (ACC/IG1)  ──→  Fuse 10A  ──→  Diode (1N5408)  ──→  Relay K1 coil+
+                                                                  │
+   Camry Chassis GND  ────────────────────────────────────────────┴──→  Relay K1 coil-
+                                                                  │
+   Relay K1 NO  ──→  Buck converter 12V IN+ (switched main power) │
+   Relay K1 NC  ──→  (not used)                                    │
+   Relay K1 COM ──→  Battery 12V (fused 15A)                     │
+                                                                  │
+   Pi GPIO17 ──→  220Ω ──→  Optocoupler LED+ ──→  GND            │
+   Optocoupler OUT ──→  Relay K1 coil+ (isolated)                │
+                                                                  │
+   Pi GPIO27 ──→  220Ω ──→  Relay K2 coil+ (accessory cut)       │
+   Relay K2 NO ──→  5V rail to USB Hub / Cameras                 │
+</pre>
+
+<h3>7.3 I2C Sensor Bus</h3>
+<pre>
+   Pi GPIO2 (SDA1) ──┬──→ BME280 SDA (0x76 or 0x77)
+                     ├──→ MPU-6050 SDA (0x68 or 0x69)
+                     ├──→ OLED SSD1306 SDA (0x3C)
+                     └──→ INA219 SDA (0x40)
+
+   Pi GPIO3 (SCL1) ──┬──→ BME280 SCL
+                     ├──→ MPU-6050 SCL
+                     ├──→ OLED SCL
+                     └──→ INA219 SCL
+
+   All devices share 3.3V from Pi Pin 1 and GND from Pin 6.
+   Add 4.7kΩ pull-ups to 3.3V if not present on modules.
+</pre>
+
+<h3>7.4 OBD-II Connection (1996 Camry)</h3>
+<pre>
+   Camry OBD-II port (driver knee panel, J1962 16-pin):
+
+   Pin 4 (Chassis GND)  ───────────────────────────→  ELM327 GND
+   Pin 5 (Signal GND)   ───────────────────────────→  ELM327 GND
+   Pin 16 (Battery +)   ───────────────────────────→  ELM327 VCC (or not used if USB powered)
+   Pin 2 (J1850 VPW)    ──X──  1996 Camry uses ISO 9141-2 or K-line (Pin 7)
+   Pin 7 (K-Line)       ───────────────────────────→  ELM327 Pin 7 (ISO 9141-2)
+   Pin 15 (L-Line)      ───────────────────────────→  ELM327 Pin 15 (optional)
+
+   ELM327 USB  ──→  Pi USB Hub (or direct)
+</pre>
+
+<div class="warning">
+  <strong>Warning:</strong> Do NOT short Pin 16 to ground. Do NOT connect to airbag pins (if present on non-standard connectors). Verify pinout with multimeter before permanent installation.
+</div>
+
+<!-- INSTALLATION STEPS -->
+<div class="page-break"></div>
+<h2>8. Installation Steps</h2>
+
+<h3>Phase 1 — Preparation</h3>
+<ol>
+  <li>Disconnect Camry negative battery terminal. Wait 10 minutes for capacitors to discharge.</li>
+  <li>Install Raspberry Pi OS (64-bit) on NVMe SSD or microSD. Enable SSH, I2C, SPI, UART via <span class="code">raspi-config</span>.</li>
+  <li>Update firmware: <span class="code">sudo rpi-eeprom-update -a</span> and <span class="code">sudo apt update &amp;&amp; sudo apt full-upgrade</span>.</li>
+  <li>Install NVMe HAT and SSD. Verify with <span class="code">lsblk</span>.</li>
+  <li>Install active cooler. Verify thermal with <span class="code">vcgencmd measure_temp</span> under load.</li>
+</ol>
+
+<h3>Phase 2 — Bench Test</h3>
+<ol>
+  <li>Connect Pi to lab bench power supply (5V/5A). Boot and verify OS.</li>
+  <li>Connect cameras via CSI cables. Test with <span class="code">rpicam-hello</span>.</li>
+  <li>Connect OBD-II adapter to a compatible vehicle or OBD simulator. Test with <span class="code">python-obd</span> or <span class="code">obd</span> library.</li>
+  <li>Connect GPS via USB or UART. Verify with <span class="code">cgps</span> or <span class="code">gpsmon</span>.</li>
+  <li>Wire I2C sensors on breadboard. Verify addresses with <span class="code">i2cdetect -y 1</span>.</li>
+  <li>Test relay board with GPIO script. Verify switching with multimeter.</li>
+</ol>
+
+<h3>Phase 3 — Vehicle Install</h3>
+<ol>
+  <li>Choose mounting location: behind glovebox, under driver dash, or in center console. Ensure airflow for Pi cooler.</li>
+  <li>Tap always-on 12V from fusebox (BAT circuit) with add-a-circuit fuse tap. Use 15A fuse.</li>
+  <li>Tap ignition-switched 12V from IG1 or ACC fuse. Use 10A fuse.</li>
+  <li>Mount buck converter in well-ventilated area. Secure with zip ties or screws. Ensure TVS diode installed.</li>
+  <li>Run fused 12V to buck input. Run buck 5V output to Pi USB-C via right-angle cable.</li>
+  <li>Mount relay board near Pi. Connect coil VCC to Pi 5V (or buck 5V). Connect coil GND to common ground.</li>
+  <li>Connect relay contacts to accessory loads (USB hub, cameras, LTE modem) per wiring diagram.</li>
+  <li>Route CSI cables from Pi to front and rear cameras. Avoid ignition coil and injector wiring. Use shielded extenders if &gt;30cm.</li>
+  <li>Mount front camera behind windshield (legal placement). Mount rear camera inside rear window.</li>
+  <li>Mount GPS antenna on dash with clear sky view. Avoid metallic film windshields.</li>
+  <li>Connect OBD-II adapter and route USB cable to Pi. Secure adapter so it does not obstruct pedals.</li>
+  <li>Install LTE modem antenna on rear shelf or window. Keep away from GPS antenna.</li>
+  <li>Run I2C sensor wires inside dash. Secure with cable clips. Keep away from high-current wiring.</li>
+</ol>
+
+<h3>Phase 4 — Software Configuration</h3>
+<ol>
+  <li>Enable <span class="code">dtparam=pciex1</span> and <span class="code">dtparam=nvme</span> in <span class="code">/boot/firmware/config.txt</span>.</li>
+  <li>Configure <span class="code">systemd</span> services for auto-start: data logger, video recorder, GPS logger, OBD poller.</li>
+  <li>Set up encrypted video partition: <span class="code">gocryptfs /mnt/video_plain /mnt/video</span> or LUKS.</li>
+  <li>Configure network: WiFi for home sync, LTE for on-road. Use NetworkManager dispatcher scripts.</li>
+  <li>Install and configure <span class="code">libcamera-apps</span>, <span class="code">ffmpeg</span>, <span class="code">python-obd</span>, <span class="code">gpsd</span>.</li>
+  <li>Install local LLM: <span class="code">llama.cpp</span> with <span class="code">Llama-3-8B-Instruct-Q4_K_M.gguf</span>.</li>
+  <li>Configure voice pipeline: <span class="code">whisper.cpp</span> → <span class="code">llama.cpp</span> → <span class="code">piper-tts</span>.</li>
+  <li>Set up MQTT client to publish telemetry. Configure Home Assistant auto-discovery if desired.</li>
+  <li>Write GPIO monitoring script for ignition sense → graceful shutdown timer.</li>
+  <li>Configure log rotation and NVMe wear monitoring: <span class="code">smartctl -a /dev/nvme0</span>.</li>
+</ol>
+
+<h3>Phase 5 — Testing &amp; Tuning</h3>
+<ol>
+  <li>Start engine. Verify Pi boots and all services start. Check <span class="code">dmesg</span> for errors.</li>
+  <li>Monitor 12V rail with INA219. Verify buck output is stable at 5.0–5.1V under load.</li>
+  <li>Test video recording: 30 min continuous. Check for thermal throttling. Adjust fan curve if needed.</li>
+  <li>Test OBD data stream at full rate. Verify no frame drops or bus errors.</li>
+  <li>Test ignition-off sequence: verify 10-min timer, graceful shutdown, relay cutoff.</li>
+  <li>Test LTE connectivity while driving. Verify handover between WiFi (home) and LTE (road).</li>
+  <li>Test emergency crash sequence: simulate high G with MPU-6050. Verify video save + SMS.</li>
+  <li>Test voice assistant in cabin noise. Adjust mic gain and noise gate.</li>
+  <li>Secure all wiring with loom, tape, and cable ties. No loose wires near pedals or steering.</li>
+  <li>Reconnect battery negative terminal. Perform final multi-meter check for shorts.</li>
+</ol>
+
+<div class="warning">
+  <strong>Final Safety Check:</strong> Verify no wires interfere with brake pedal, accelerator, or steering column. Verify all fuses are correct ratings. Verify buck converter and Pi enclosure are not in airbag deployment zone. Document all non-factory wiring for future owners.
+</div>
+
+<!-- APPENDIX -->
+<div class="page-break"></div>
+<h2>Appendix A — 1996 Toyota Camry Specific Notes</h2>
+<ul>
+  <li><strong>Engine:</strong> 2.2L 5S-FE I4 or 3.0L 1MZ-FE V6. OBD-II protocol is ISO 9141-2 (K-line on Pin 7). Some early 1996 models may use J1850 VPW; verify with scan tool.</li>
+  <li><strong>Transmission:</strong> A140E (4-cyl) or A540E (V6) 4-speed automatic. No native CAN bus on this generation.</li>
+  <li><strong>Fusebox:</strong> Driver side kick panel and engine compartment. Use add-a-circuit taps for clean installation.</li>
+  <li><strong>Ignition:</strong> Switched 12V available at cigarette lighter (ACC) or ignition coil (IG1). Verify with multimeter.</li>
+  <li><strong>Radio:</strong> Standard double-DIN opening. Pi + 7" touchscreen can replace factory head unit with adapter kit.</li>
+  <li><strong>Airbags:</strong> SRS present. Never tap into SRS wiring. Keep all added wiring &gt;30cm from airbag modules.</li>
+</ul>
+
+<h2>Appendix B — Quick Command Reference</h2>
+<pre>
+# Check Pi temperature
+vcgencmd measure_temp
+
+# List I2C devices
+i2cdetect -y 1
+
+# Test camera
+rpicam-hello --qt-preview
+
+# Record H.264 segment
+rpicam-vid -t 0 --inline --codec h264 -o test.h264
+
+# OBD read DTCs (python)
+import obd; connection = obd.OBD(); print(connection.query(obd.commands.GET_DTC))
+
+# GPS status
+cgps -s
+
+# Check NVMe
+sudo nvme smart-log /dev/nvme0
+
+# Encrypt video partition
+gocryptfs -init /mnt/video_cipher
+gocryptfs /mnt/video_cipher /mnt/video
+</pre>
+
+<h2>Appendix C — Integration Count Summary</h2>
+<table>
+  <tr><th>Category</th><th>Count</th></tr>
+  <tr><td>Engine</td><td>15</td></tr>
+  <tr><td>Safety</td><td>12</td></tr>
+  <tr><td>Navigation</td><td>10</td></tr>
+  <tr><td>Infotainment</td><td>12</td></tr>
+  <tr><td>Climate</td><td>8</td></tr>
+  <tr><td>Security</td><td>12</td></tr>
+  <tr><td>Lighting</td><td>10</td></tr>
+  <tr><td>Data Logging</td><td>15</td></tr>
+  <tr><td>AI / LLM</td><td>10</td></tr>
+  <tr><td>Power Management</td><td>10</td></tr>
+  <tr><td>M.2 / Video</td><td>8</td></tr>
+  <tr><td>Body</td><td>10</td></tr>
+  <tr><td>Fuel</td><td>8</td></tr>
+  <tr><td>Communication</td><td>12</td></tr>
+  <tr><th>Total</th><th>150</th></tr>
+</table>
+
+<div style="text-align:center; margin-top:20mm; color:#666; font-size:9pt;">
+  <em>Document generated by Hermes Agent — June 2026</em><br>
+  <em>For updates visit: https://hermes-agent.nousresearch.com/docs</em>
+</div>
+
+</body>
+</html>
