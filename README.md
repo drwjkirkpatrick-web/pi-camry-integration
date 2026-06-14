@@ -2,255 +2,241 @@
 
 Hermes Agent × Raspberry Pi 5 × 1996 Toyota Camry — Complete vehicle telemetry, security, and AI copilot platform.
 
-**150 integrations** | **Dual-camera dashcam** | **OBD-II live diagnostics** | **Telegram remote control** | **Hermes LLM voice assistant**
-
----
-
-## What This Is
-
-A comprehensive Python platform that turns a Raspberry Pi 5 into the brain of a 1996 Toyota Camry. Every subsystem — engine, safety, navigation, security, climate, lighting, audio, data logging, and AI — is wired, coded, and event-driven.
-
-- **OBD-II** live telemetry via ELM327 (ISO 9141-2 / KWP2000 for '96)
-- **Dual-camera** rolling-buffer dashcam with AES-256 encryption on M.2 NVMe
-- **GPS** tracking with geofences and trip logging
-- **IMU** collision detection, hard-brake logging, tow alerts
-- **GPIO relay control** for headlights, cooling fan, fuel pump kill, HVAC
-- **Telegram bot** — remote status, location, video snapshots, lock/unlock
-- **Voice assistant** — "Hey Hermes, why is my idle rough?" (faster-whisper + local LLM)
-- **M.2 NVMe** 1TB storage architecture with LUKS encryption
-
----
-
-## Hardware Stack
-
-| Component | Model | Purpose |
-|-----------|-------|---------|
-| Main Computer | Raspberry Pi 5 8GB | Hermes agent host |
-| Storage | Pineberry Pi M.2 HAT+ + 1TB NVMe | Boot + video + logs |
-| OBD Adapter | USB ELM327 (ISO/KWP firmware) | ECU communication |
-| Front Camera | Pi Camera Module 3 (wide) | Dashcam |
-| Rear Camera | Pi Camera Module 3 | Rear-view / parking |
-| GPS | u-blox NEO-M8N USB | Location / speed / geofence |
-| IMU | MPU-6050 (I2C) | Motion / collision / G-force |
-| Audio | USB mic + 3.5mm DAC | Voice assistant / alerts |
-| Relays | 8-channel 5V relay board | 12V circuit control |
-| ADC | MCP3008 (SPI) | Analog sensor reading |
-| Power | 12V→5V/3A buck + PD trigger | Clean Pi 5 power |
-
-Full parts list, wiring diagrams, and GPIO pinout are in [`guide.pdf`](guide.pdf) (47 pages).
+**150+ integrations** | **Dual-camera dashcam** | **OBD-II live diagnostics** | **Voice copilot** | **Modern vehicle adapter**
 
 ---
 
 ## Quick Start
 
-### One-line install (on Pi 5)
-
 ```bash
-curl -sSL https://raw.githubusercontent.com/drwjkirkpatrick-web/pi-camry-integration/main/scripts/install.sh | sudo bash
-```
-
-Or manual:
-
-```bash
-# 1. Clone
+# 1. Flash Pi 5 with Raspberry Pi OS, enable I2C/SPI/camera
+# 2. Install M.2 HAT+ with 1TB NVMe
+# 3. Clone and install
 git clone https://github.com/drwjkirkpatrick-web/pi-camry-integration.git
 cd pi-camry-integration
+sudo bash scripts/install.sh
 
-# 2. Install (creates venv automatically with uv)
-uv pip install -e ".[dev]"
+# 4. Edit config
+sudo nano /etc/pi-camry/camry.yaml
 
-# 3. Configure
-cp configs/camry.example.yaml /etc/pi-camry/camry.yaml
-# Edit: OBD port, GPS port, Telegram token, GPIO pins
-
-# 4. Run bench test
+# 5. Run bench test
 sudo .venv/bin/python scripts/bench_test.py --all
 
-# 5. Start the daemon
-camry-daemon
-
-# 6. Or run individual modules
-camry-obd --watch rpm,speed,coolant
-camry-camera --snapshot
+# 6. Start daemon
+sudo systemctl start camry-daemon
 ```
 
 ---
 
-## Project Structure
+## Hardware Stack
+
+| Component | Part | Interface | Status |
+|-----------|------|-----------|--------|
+| **Pi 5** | Raspberry Pi 5 8GB | — | ✅ Core |
+| **Storage** | Pineberry Pi M.2 HAT+ 1TB NVMe | PCIe | ✅ 72hr rolling buffer |
+| **OBD-II** | ELM327 USB | USB | ✅ ISO 9141-2 / KWP2000 |
+| **GPS** | u-blox NEO-M8N | UART/USB | ✅ NMEA, geofence |
+| **RTK GPS** | u-blox ZED-F9P | UART | 🆕 2cm accuracy |
+| **Camera (front)** | Pi Camera Module 3 | CSI0 | ✅ 1080p H.264 |
+| **Camera (rear/cabin)** | Pi Camera Module 3 | CSI1 | ✅ 1080p H.264 |
+| **Thermal** | MLX90640 / FLIR Lepton | I2C/SPI | 🆕 Night vision |
+| **IMU** | MPU-6050 / MPU-9250 | I2C | ✅ 100Hz, collision detect |
+| **LTE** | Quectel EC25 / SIM7600 | USB | 🆕 Always-on 4G |
+| **Rain** | IR reflectance module | ADC (MCP3008) | 🆕 Auto wipers |
+| **Ultrasonic** | HC-SR04 × 8 | GPIO | 🆕 Parking assist |
+| **Air quality** | SCD40 + SGP40 + SPS30 | I2C | 🆕 CO2/VOC/PM2.5 |
+| **Display** | JoyBring 10.1" AV touchscreen | HDMI + USB | 🆕 Head-unit replacement |
+| **Audio** | USB mic + AUX/FM | USB/3.5mm | ✅ Voice copilot |
+| **Power** | 12V→5V/5A buck + relay board | Hardwired | ✅ IGN-switched |
+
+---
+
+## Module Architecture
 
 ```
-pi-camry-integration/
-├── src/pi_camry/
-│   ├── core/           # Config, logging, async event bus
-│   ├── obd/            # OBD-II ELM327 interface (ISO 9141-2 / KWP2000)
-│   ├── camera/         # Dual-camera recorder + picamera2 backend
-│   ├── gps/            # u-blox NMEA tracker
-│   ├── imu/            # MPU-6050 motion sensor
-│   ├── gpio/           # Relay + input control (lgpio)
-│   ├── audio/          # Voice I/O + faster-whisper STT + LLM integration
-│   ├── telegram/       # Bot commands + alerts
-│   ├── storage/        # M.2 / SQLite / encryption
-│   ├── cli.py          # camry-obd, camry-camera CLI tools
-│   └── main.py         # Daemon orchestrator
-├── tests/              # pytest suite (87 tests, mock-heavy)
-├── configs/            # YAML configs + environment templates
-├── scripts/            # install.sh, bench_test.py, systemd service
-├── docs/               # Wiring diagrams, references
-├── guide.pdf           # Complete 150-integration reference (47 pages)
-└── pyproject.toml      # Dependencies + entry points
+Event Bus (async pub/sub, 30+ event types)
+    ├── Core
+    │   ├── config.py          # Pydantic settings, 15 subsystems
+    │   ├── __init__.py        # EventBus, 30 event types, logging
+    │   └── main.py            # Daemon orchestrator
+    │
+    ├── 1996 Camry (Base)
+    │   ├── obd/interface.py     # ELM327, ISO 9141-2, 15 PIDs
+    │   ├── camera/recorder.py  # Dual 1080p, rolling buffer, AES-256
+    │   ├── camera/picamera2_backend.py  # Real Pi Camera 3 H.264
+    │   ├── gps/tracker.py     # NMEA, geofence, trip logging
+    │   ├── imu/sensor.py      # MPU-6050, collision/tow detection
+    │   ├── gpio/controller.py  # lgpio relays, inputs, MCP3008 ADC
+    │   ├── audio/assistant.py  # Wake word, LLM query, TTS
+    │   ├── audio/whisper_stt.py  # faster-whisper local STT
+    │   ├── telegram/bot.py    # 10 commands, auto-alerts
+    │   └── storage/manager.py  # aiosqlite, 5 tables, disk monitor
+    │
+    ├── Display (JoyBring)
+    │   ├── joybring.py        # Main controller
+    │   ├── hdmi_sink.py       # HDMI, EDID, CEC, backlight
+    │   ├── touch_input.py     # USB multi-touch
+    │   ├── can_bridge.py      # Vehicle CAN ↔ head-unit
+    │   ├── steering_wheel.py  # ADC resistor ladder
+    │   ├── dashboard.py       # Kivy GUI, 8 pages
+    │   └── radio.py           # FM/AM/internet radio
+    │
+    ├── Modern Vehicle (2008+)
+    │   ├── can_multibus.py    # Multi-CAN bus (PT/body/chassis)
+    │   ├── uds_client.py      # UDS diagnostic (CAN-TP, DoIP)
+    │   ├── tpms_direct.py     # Direct RF TPMS (RTL-SDR)
+    │   ├── radar_fusion.py    # ADAS radar fusion (ACC, AEB)
+    │   ├── driver_monitor.py  # DMS (drowsiness, distraction)
+    │   └── interior_sensing.py  # Air quality (CO2, VOC, PM)
+    │
+    ├── Connectivity
+    │   └── lte.py             # 4G LTE, NTRIP, MQTT, SMS
+    │
+    └── Sensors
+        ├── rain_sensor.py     # Auto wipers, hysteresis
+        ├── ultrasonic_array.py  # 8× parking sensors
+        ├── rtk_gps.py         # Centimeter GPS (ZED-F9P)
+        └── thermal_camera.py  # Night vision, hotspot detection
 ```
 
 ---
 
-## Modules
-
-### OBD-II (`pi_camry.obd`)
-- Continuous PID polling at 2 Hz
-- DTC read/clear with Telegram alerts
-- Instant MPG calculation from MAF + speed
-- Auto-reconnect with exponential backoff
-- **CLI:** `camry-obd --watch rpm,speed,coolant --interval 1`
-
-### Camera (`pi_camry.camera`)
-- Circular RAM buffer (default 60 sec)
-- Event-triggered lock: collision, hard brake, CEL
-- H.264 hardware encode via picamera2 → M.2 NVMe
-- AES-256 encryption via `cryptography.fernet`
-- Motion detection via frame differencing
-- **CLI:** `camry-camera --snapshot --camera front`
-
-### GPS (`pi_camry.gps`)
-- NMEA GGA/RMC/VTG parsing
-- Geofence enter/exit events
-- Trip logging with distance + duration
-- "Find My Car" Telegram command
-
-### IMU (`pi_camry.imu`)
-- 100 Hz sampling from MPU-6050
-- 3G collision detection → auto video lock
-- Hard brake / hard accel / cornering alerts
-- Tow detection (motion while ignition off)
-
-### GPIO (`pi_camry.gpio`)
-- Ignition-sense graceful shutdown (60s timer)
-- Relay control: fan, headlights, fuel pump, HVAC
-- Door/trunk/hood ajar monitoring
-- ADC via MCP3008 for analog sensors
-
-### Audio / Voice Assistant (`pi_camry.audio`)
-- Wake word detection (energy-based, whisper for production)
-- faster-whisper `tiny.en` model (local, ~75MB, real-time on Pi 5)
-- LLM query via aiohttp (Hermes/local endpoint)
-- TTS: espeak-ng (fast) → pyttsx3 fallback
-- Event-triggered spoken alerts (collision, CEL)
-
-### Telegram Bot (`pi_camry.telegram`)
-- **Commands:** `/status`, `/location`, `/find`, `/video`, `/dtc`, `/lock`, `/unlock`, `/climate`, `/trip`
-- **Auto-alerts:** collision, CEL, geofence exit, tow, low storage, low battery
-- Photo support for video snapshots
-
-### Storage (`pi_camry.storage`)
-- aiosqlite async database
-- Tables: obd_logs, gps_tracks, events, video_segments, maintenance
-- psutil disk monitoring (auto-prune at 85%)
-- 90-day log retention
-
----
-
-## Testing
+## CLI Tools
 
 ```bash
-# Run full test suite (all hardware mocked)
+# Individual subsystem testing
+camry-obd --watch rpm,speed,coolant   # Live OBD monitor
+camry-camera --snapshot               # Capture still image
+camry-camera --record 60              # Record 60-second clip
+
+# Bench test (run before vehicle install)
+python scripts/bench_test.py --all
+python scripts/bench_test.py --obd --gps --imu --gpio --camera --audio --lte
+```
+
+---
+
+## Configuration
+
+Copy and edit:
+
+```bash
+cp configs/camry.example.yaml /etc/pi-camry/camry.yaml
+cp configs/environment.example /etc/pi-camry/environment
+sudo chmod 600 /etc/pi-camry/environment
+```
+
+Key sections in `camry.yaml`:
+- `vehicle`: year, make, model, engine, maintenance intervals
+- `obd`: port, protocol, PIDs to poll
+- `camera`: resolution, buffer duration, encryption
+- `gps`: port, baud, geofence zones
+- `gpio`: relay pins, input pins, ADC channels
+- `audio`: sample rate, wake word, LLM endpoint
+- `telegram`: bot token, authorized chat IDs
+- `display`: resolution, touch, CAN bridge, SWC
+- `modern`: CAN-FD, UDS, TPMS, radar, DMS settings
+- `lte`: APN, NTRIP caster, MQTT broker
+- `rain`: thresholds, wiper pins
+- `ultrasonic`: sensor count, pins, alert distances
+- `rtk`: port, NTRIP credentials
+- `thermal`: model, overlay alpha, hotspot threshold
+
+---
+
+## Test Suite
+
+```bash
+# Run all tests
 python -m pytest tests/ -v
 
 # Run specific module
-python -m pytest tests/test_obd.py -v
-python -m pytest tests/test_camera.py -v
-
-# Hardware bench test (requires actual Pi + sensors)
-sudo python scripts/bench_test.py --all
+python -m pytest tests/test_new_sensors.py -v
+python -m pytest tests/test_modern_vehicle.py -v
+python -m pytest tests/test_display.py -v
 ```
 
-The test suite uses `pytest.importorskip` and `unittest.mock` to skip gracefully when hardware-specific dependencies (lgpio, pyaudio, picamera2) are unavailable.
+| Module | Tests | Status |
+|--------|-------|--------|
+| Core | 12 | ✅ All pass |
+| OBD | 10 | ✅ Mocked |
+| GPS | 6 | ✅ Mocked |
+| IMU | 7 | ✅ Mocked |
+| GPIO | 10 | ✅ Mocked |
+| Camera | 9 | ✅ Mocked |
+| Audio | 7 | ⚠️ 5 need tuning |
+| Storage | 10 | ✅ All pass |
+| Telegram | 8 | ✅ Mocked |
+| Display | 11 | ✅ Mocked |
+| Modern Vehicle | 13 | ✅ Mocked |
+| New Sensors | 14 | ✅ All pass |
+| **Total** | **117** | **~107 pass** |
 
 ---
 
 ## Systemd Service
 
 ```bash
-# Install service
+# Install auto-start
 sudo cp scripts/camry-daemon.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable camry-daemon
 sudo systemctl start camry-daemon
 
-# View logs
+# Check status
+sudo systemctl status camry-daemon
 sudo journalctl -u camry-daemon -f
 ```
 
-The service runs as `pi` user, loads environment from `/etc/pi-camry/environment`, and handles SIGTERM for graceful shutdown.
+---
+
+## Safety & Legal
+
+⚠️ **This system is for diagnostics, logging, and driver assistance only.**
+
+- **No physical control** of brakes, steering, or throttle on 1996 Camry
+- **Relay controls** (wipers, HVAC, lights) are advisory — driver override always works
+- **OBD-II is read-only** — no ECU writes without explicit unlock
+- **Dashcam encryption** uses AES-256 — keys in `/etc/pi-camry/environment`
+- **DMS camera** is IR + local processing — no video leaves the Pi
+- **Check local laws** for dashcam, phone use, and OBD-II modifications
 
 ---
 
-## Environment Variables
+## Roadmap
 
-```bash
-# Core
-CAMRY_DEBUG=true
-CAMRY_LOG_LEVEL=INFO
-
-# OBD
-OBD_PORT=/dev/ttyUSB0
-OBD_PROTOCOL=ISO9141_2
-
-# Camera
-CAM_BUFFER_SECONDS=60
-CAM_ENCRYPT=true
-
-# GPS
-GPS_PORT=/dev/ttyACM0
-GPS_HOME_LOCATION=45.5152,-122.6784
-
-# Telegram
-TG_BOT_TOKEN=your_t...n
-
-# Storage
-STORAGE_NVME_DEVICE=/dev/nvme0n1
-```
-
-Secrets should go in `/etc/pi-camry/environment` (mode 600), sourced by systemd.
+| Priority | Feature | Module | Est. Cost |
+|----------|---------|--------|-----------|
+| 1 | 4G LTE HAT | `connectivity/lte.py` | $60 |
+| 2 | RTK GPS | `sensors/rtk_gps.py` | $200 |
+| 3 | Direct TPMS | `modern_vehicle/tpms_direct.py` | $30 |
+| 4 | Interior air quality | `modern_vehicle/interior_sensing.py` | $65 |
+| 5 | Aftermarket radar | `modern_vehicle/radar_fusion.py` | $150 |
+| 6 | Thermal camera | `sensors/thermal_camera.py` | $60-200 |
+| 7 | DMS IR camera | `modern_vehicle/driver_monitor.py` | $40 |
+| 8 | Rain sensor | `sensors/rain_sensor.py` | $10 |
+| 9 | Ultrasonic parking | `sensors/ultrasonic_array.py` | $25 |
+| 10 | Mobileye 6 (AEB) | External | $1000 |
 
 ---
 
-## Whisper STT Setup
+## Documentation
 
-```bash
-# faster-whisper auto-downloads models on first use
-# Or pre-download during install:
-python -c "from faster_whisper import WhisperModel; WhisperModel('tiny.en', device='cpu', compute_type='int8')"
-
-# Models available:
-#   tiny.en  (~75MB)  — fastest, good accuracy, RECOMMENDED for Pi 5
-#   base.en  (~150MB) — slightly better accuracy
-#   small.en (~500MB) — best accuracy, slower
-```
-
----
-
-## Safety Notes
-
-- **Relay wiring:** Always fuse 12V taps. Use automotive relay sockets, not breadboard relays for permanent install.
-- **Fuel pump kill switch:** Test thoroughly. A failed relay = stranded.
-- **Encryption key:** Store `/etc/pi-camry/video.key` on a separate USB or TPM if available. M.2 is encrypted at rest.
-- **OBD protocols:** 1996 Camry uses ISO 9141-2 (pin 7) or KWP2000. Ensure ELM327 firmware supports pre-CAN.
-- **Voice assistant:** The LLM endpoint should be your own (local Ollama, Hermes agent, etc.) — do not send vehicle data to third-party APIs without consent.
+- [`docs/SHOPPING_LIST.md`](docs/SHOPPING_LIST.md) — Complete parts list with vendors, prices, wiring
+- [`guide.pdf`](guide.pdf) — 47-page integration reference (150 integrations, wiring diagrams, GPIO pinout)
+- [`configs/camry.example.yaml`](configs/camry.example.yaml) — Full configuration template
+- [`scripts/bench_test.py`](scripts/bench_test.py) — Hardware verification before install
 
 ---
 
 ## License
 
-MIT — See [LICENSE](LICENSE).
+MIT — See [LICENSE](LICENSE) (create one if needed)
 
 ---
 
-*Built for a 1996 Toyota Camry. Generalizes to any OBD-II vehicle with analog accessories.*
+## Author
+
+Walker — Oregon naturopathic physician, poultry scientist, Hermes Agent builder.
+
+GitHub: [@drwjkirkpatrick-web](https://github.com/drwjkirkpatrick-web)
