@@ -112,6 +112,12 @@ class EventType(Enum):
     DRIVER_ALERT = auto()
     INTERIOR_AIR_QUALITY = auto()
 
+    # Sensor / environment events
+    ENVIRONMENT = auto()
+    GPIO_COMMAND = auto()
+    AUDIO_ALERT = auto()
+    COLLISION_WARNING = auto()
+
 
 @dataclass
 class Event:

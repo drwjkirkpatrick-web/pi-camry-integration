@@ -241,6 +241,99 @@ class DisplayConfig(BaseSettings):
     radio_presets: list[tuple[str, float]] = Field(default_factory=list)
 
 
+class LTEConfig(BaseSettings):
+    """4G/LTE modem settings."""
+    model_config = SettingsConfigDict(env_prefix="LTE_")
+
+    enabled: bool = False
+    port: str = "/dev/ttyUSB2"  # Quectel AT port
+    baud: int = 115200
+    apn: str = "hologram"
+    sim_pin: str = ""  # Optional SIM PIN
+    # NTRIP (RTK corrections)
+    ntrip_enabled: bool = False
+    ntrip_caster: str = ""
+    ntrip_mountpoint: str = ""
+    ntrip_user: str = ""
+    ntrip_password: str = ""
+    # MQTT
+    mqtt_enabled: bool = False
+    mqtt_broker: str = ""
+    mqtt_port: int = 1883
+    mqtt_client_id: str = "camry-pi"
+    # SMS fallback
+    sms_alert_number: str = ""
+
+
+class RainSensorConfig(BaseSettings):
+    """Rain sensor settings."""
+    model_config = SettingsConfigDict(env_prefix="RAIN_")
+
+    enabled: bool = False
+    sensor_type: str = "ir_reflectance"  # 'ir_reflectance', 'capacitive', 'oem'
+    adc_channel: int = 0  # MCP3008 channel
+    threshold_on: int = 600
+    threshold_off: int = 700
+    # Wiper control
+    wiper_relay_pin: int | None = None
+    wiper_speed_pins: list[int] = Field(default_factory=list)  # [slow, medium, fast]
+
+
+class UltrasonicConfig(BaseSettings):
+    """Ultrasonic parking sensor array."""
+    model_config = SettingsConfigDict(env_prefix="ULTRASONIC_")
+
+    enabled: bool = False
+    front_count: int = 4
+    rear_count: int = 4
+    # GPIO pins: list of (trig, echo) tuples
+    front_pins: list[tuple[int, int]] = Field(default_factory=list)
+    rear_pins: list[tuple[int, int]] = Field(default_factory=list)
+    max_range_cm: int = 400
+    min_range_cm: int = 2
+    # Alert distances
+    alert_near_cm: int = 30   # Fast beep
+    alert_mid_cm: int = 60    # Medium beep
+    alert_far_cm: int = 100   # Slow beep
+
+
+class RTKGPSConfig(BaseSettings):
+    """RTK GPS (u-blox ZED-F9P) settings."""
+    model_config = SettingsConfigDict(env_prefix="RTK_")
+
+    enabled: bool = False
+    port: str = "/dev/ttyAMA0"  # Pi UART0
+    baud: int = 38400
+    # NTRIP correction
+    ntrip_enabled: bool = False
+    ntrip_caster: str = ""
+    ntrip_port: int = 2101
+    ntrip_mountpoint: str = ""
+    ntrip_user: str = ""
+    ntrip_password: str = ""
+    # Logging
+    log_raw_ubx: bool = False
+
+
+class ThermalCameraConfig(BaseSettings):
+    """Thermal camera (FLIR Lepton / MLX90640) settings."""
+    model_config = SettingsConfigDict(env_prefix="THERMAL_")
+
+    enabled: bool = False
+    model: str = "mlx90640"  # 'mlx90640', 'lepton35', 'seek'
+    # MLX90640: I2C
+    i2c_bus: int = 1
+    i2c_address: int = 0x33
+    # Lepton: SPI
+    spi_bus: int = 0
+    spi_device: int = 0
+    # Seek: USB
+    usb_path: str = ""
+    # Fusion
+    overlay_alpha: float = 0.5  # Blend with visible camera
+    hotspot_threshold_c: float = 35.0  # Highlight above this temp
+
+
 class MainConfig(BaseSettings):
     """Top-level configuration. All sub-configs nest here."""
     model_config = SettingsConfigDict(
@@ -265,6 +358,11 @@ class MainConfig(BaseSettings):
     vehicle: VehicleConfig = Field(default_factory=VehicleConfig)
     display: DisplayConfig = Field(default_factory=DisplayConfig)
     modern: ModernVehicleConfig = Field(default_factory=ModernVehicleConfig)
+    lte: LTEConfig = Field(default_factory=LTEConfig)
+    rain: RainSensorConfig = Field(default_factory=RainSensorConfig)
+    ultrasonic: UltrasonicConfig = Field(default_factory=UltrasonicConfig)
+    rtk: RTKGPSConfig = Field(default_factory=RTKGPSConfig)
+    thermal: ThermalCameraConfig = Field(default_factory=ThermalCameraConfig)
 
     @field_validator("data_dir", mode="before")
     @classmethod
