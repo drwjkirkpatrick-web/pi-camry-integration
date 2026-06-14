@@ -237,6 +237,6 @@ MIT — See [LICENSE](LICENSE) (create one if needed)
 
 ## Author
 
-Walker — Oregon naturopathic physician, poultry scientist, Hermes Agent builder.
+Walker — Hermes Agent builder.
 
 GitHub: [@drwjkirkpatrick-web](https://github.com/drwjkirkpatrick-web)
